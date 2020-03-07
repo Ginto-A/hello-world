@@ -1,10 +1,49 @@
-//è¶…çº§ç´ æ•°ï¼šå®ƒæœ¬èº«ï¼Œå„ä½æ•°å­—çš„å’Œï¼Œå„ä½æ•°å­—çš„å¹³æ–¹å’Œï¼Œéƒ½æ˜¯ç´ æ•°ã€‚
-//æ±‚ 100~10000 å†…çš„æ‰€æœ‰è¶…çº§ç´ æ•°ï¼ŒåŠå®ƒä»¬çš„å¹³å‡æ•°ã€‚
+//³¬¼¶ËØÊı£ºËü±¾Éí£¬¸÷Î»Êı×ÖµÄºÍ£¬¸÷Î»Êı×ÖµÄÆ½·½ºÍ£¬¶¼ÊÇËØÊı¡£
+//Çó 100~10000 ÄÚµÄËùÓĞ³¬¼¶ËØÊı£¬¼°ËüÃÇµÄÆ½¾ùÊı¡£
+#include <stdio.h>
+
 
 int isPrime(int x);
 int splitNum(int x, int num[]);
 
 int main()
 {
-    return 0;
+    int a = 100;
+    int count = 0;
+
+    for(a = 100; a < 10000; a++){
+		int i = 0, sum = 0, product = 0;
+	    int num[5] = {0};
+		for(i = 0; i < splitNum(a, num); i++){
+			sum += num[i];
+			product += num[i] * num [i];
+		}
+		if(isPrime(a) && isPrime(sum) && isPrime(product)){
+			count++;
+			printf("%d\t", a);
+			if(count % 5 == 0) printf("\n");
+		}			
+	}
+	
+	return 0;
+}
+
+int isPrime(int x){
+    int i = 2;
+	if(x < 2) return 0;
+	for(i = 2; i < x; i++){
+    	if(x % i == 0){
+    		return 0;
+		}
+	}
+	return 1;
+}
+int splitNum(int x, int num[]){
+	int i = 0;
+	for(i = 0; x >= 10; i++){
+		num[i] = x % 10;
+		x = x / 10;
+	}//Î»ÊÇµ¹ĞòµÄ 
+	num[i] = x;
+	return i + 1;
 }
