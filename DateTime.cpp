@@ -9,7 +9,7 @@ typedef struct _DateTime
 	int hour, minute, second;
 };
 static void showtime(_DateTime today) {
-	cout << "��ǰʱ��Ϊ	" << today.year << "/" << today.month << "/" << today.day
+	cout << "当前时间为	" << today.year << "/" << today.month << "/" << today.day
 		<< "	" << today.hour << ":" << today.minute << ":" << today.second << endl;
 }
 static void initTime(_DateTime* today) {
