@@ -20,7 +20,7 @@ int main() {
 
 	return 0;
 }
-
+// 
 void DateTime::showtime() {
 	cout << "当前时间为	" << year << "/" << month << "/" << day
 		<< "	" << hour << ":" << minute << ":" << second << endl;
