@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include<iostream>
 
 int LocationOfSY(int year, int month, int day);
@@ -8,10 +7,19 @@ using namespace std;
 class Datetime
 {
 public:
+    //无参构造函数
 	Datetime();
-	~Datetime();
-	void setTime();
-	void showTime();
+    //有参构造函数（函数重载）
+    Datetime(int year, int month, int day, int hour, int minute, int second);
+    //拷贝构造函数
+    Datetime(const Datetime &dt);
+    //缺省构造函数
+    //构造函数初始值列表
+    //Datetime(int y, int m, int d, int h, int min, int s) :year(y), month(m), day(d), hour(h), minute(min), second(s) { LunarLeap = false; };
+	//析构函数
+    ~Datetime();
+	void setTime();//设定时间
+	void showTime();//显示时间
 	void showMoon();//转换成阴历
 
 private:
@@ -21,73 +29,51 @@ private:
 };
 
 int main() {
-	
-	Datetime dt;
-	dt.setTime();
-	dt.showTime();
-    dt.showMoon();
+	//Datetime* dt = new Datetime;//在堆区开辟空间，FIFO
+	Datetime dt;//在栈区开辟，函数执行完会自动消亡，FILO
+    Datetime dt1(2020, 3, 27, 10, 46, 30);
+    Datetime dt2(dt1);
+    Datetime &dt3 = dt;//引用，dt3是dt的别名
+    Datetime *dt4 = &dt;//指针，dt4是指向dt的地址的指针
 
+    //dt.setTime();
+    dt.showTime();
+    dt1.showTime();
+	dt2.showTime();
+    dt3.showTime();//引用的调用方法
+    dt4->showTime();//指针的调用用法
+    //dt1.showMoon();
+
+	//delete dt;//与new配套，手动消亡
 	return 0;
-=======
-#include <iostream>
-class DateTime {
-private:
-  static int sth;
-  int year, month, day;
-  int hour, minute, second;
-public:
-  DateTime();
-  DateTime(int y, int m, int d, int hour, int minute, int second); 
-  DateTime(const DateTime &dt);
-  ~DateTime();
-  static void showTime();
-  void showMoon();  //作业：将当前公历转换为农历显示出来 
-};
-
-int DateTime::sth = 0;
-
-int main() {
-  DateTime dt, dt1(2020, 3, 27, 10, 40, 55);
-  DateTime dt2(dt), &dt3 = dt;
-  DateTime *dt4 = &dt;
-  dt.showTime();
-  dt1.showTime();
-  dt2.showTime();
-  dt3.showTime();
-  dt4->showTime();
-  return 0;
->>>>>>> upstream/master
 }
 
 Datetime::Datetime()
 {
-<<<<<<< HEAD
 	year = 0; month = 0; day = 0;
 	hour = 0; minute = 0; second = 0;
     LunarLeap = false;
-=======
-  year = 2020; month = 3; day = 20;
-  hour = 11; minute = 27; second = 55;
-  sth = 11;
+    cout << "构造" << this << endl;
 }
-DateTime::DateTime(int y, int m, int d, int hour, int minute, int second)
-{
-  year = y; month = m; day = d;
-  this->hour = hour; this->minute = minute; this->second = second;
+Datetime::Datetime(int year, int month, int day, int hour, int minute, int second) {
+    this->year = year; this->month = month; this->day = day;
+    this->hour = hour; this->minute = minute; this->second = second;
+    LunarLeap = false;//参数与成员变量同名时，可以用this指针解决
+    cout << "构造" << this << endl;
 }
-DateTime::DateTime(const DateTime &dt)
-{
-  year = dt.year; month = dt.month; day = dt.day;
-  hour = dt.hour; minute = dt.minute; second = dt.second;
->>>>>>> upstream/master
+Datetime::Datetime(const Datetime& dt) {
+    year = dt.year; month = dt.month; day = dt.day;
+    hour = dt.hour; minute = dt.minute; second = dt.second;
+    LunarLeap = false;
+    cout << "构造" << this << endl;
 }
 
 Datetime::~Datetime()
 {
-<<<<<<< HEAD
+    cout << "析构" << this << endl;
 }
 void Datetime::showTime() {
-	cout << year << "/" << month << "/" << day << " " 
+	cout << "当前时间为：" << year << "/" << month << "/" << day << " " 
 		<< hour << ":" << minute << ":" << second << endl;
 }
 void Datetime::setTime() {
@@ -96,7 +82,6 @@ void Datetime::setTime() {
     cout << "请按时分秒输入时间（以空格隔开）" << endl;
 	cin >> hour >> minute >> second;
 }
-
 void Datetime::showMoon() {
 	/**
 	 * 前提：网络的农历表
@@ -159,39 +144,38 @@ void Datetime::showMoon() {
          0x4A4EB9,0x0A4D4C,0x0D1541,0x2D92B5 //2091-2099 
     };//数据来源于网络
 
-    Datetime Lunardt;
-    Lunardt.year = year;
-    Lunardt.month = 1;
+    Datetime *Lunardt = new Datetime;
+    Lunardt->year = year;
+    Lunardt->month = 1;
     int year_index = year - BEGIN_YEAR;//下标，用于对照农历表
 
     if (year <= BEGIN_YEAR || year > BEGIN_YEAR + NUMBER_YEAR) {
         cout << "超出转换范围" << endl;
     }else{
-        
-        Datetime SpringFestival;
-        SpringFestival.year = year;
-        SpringFestival.month = (LUNAR_YEARS[year_index] & 0x60) >> 5;//移位操作，根据农历表的第5~6位得到春节月份
-        SpringFestival.day = (LUNAR_YEARS[year_index] & 0x1f);//根据0~4位得出日期
+        Datetime *SpringFestival= new Datetime;
+        SpringFestival->year = year;
+        SpringFestival->month = (LUNAR_YEARS[year_index] & 0x60) >> 5;//移位操作，根据农历表的第5~6位得到春节月份
+        SpringFestival->day = (LUNAR_YEARS[year_index] & 0x1f);//根据0~4位得出日期
         
         int Locationdt = LocationOfSY(year, month, day);//今天在公历年的位置
-        int LocationSF = LocationOfSY(SpringFestival.year, SpringFestival.month, SpringFestival.day);//春节在公历年的位置
+        int LocationSF = LocationOfSY(SpringFestival->year, SpringFestival->month, SpringFestival->day);//春节在公历年的位置
         int LocationLunardt = Locationdt - LocationSF + 1;//今天在农历年的位置
         
         if (Locationdt < LocationSF) {
             year_index--;
-            Lunardt.year--;
+            Lunardt->year--;
             if (year_index < 0) cout << "超出转换范围" << endl;
-            SpringFestival.year--;
-            SpringFestival.month = (LUNAR_YEARS[year_index] & 0x60) >> 5;
-            SpringFestival.day = (LUNAR_YEARS[year_index] & 0x1f);
-            LocationSF = LocationOfSY(SpringFestival.year, SpringFestival.month, SpringFestival.day);
+            SpringFestival->year--;
+            SpringFestival->month = (LUNAR_YEARS[year_index] & 0x60) >> 5;
+            SpringFestival->day = (LUNAR_YEARS[year_index] & 0x1f);
+            LocationSF = LocationOfSY(SpringFestival->year, SpringFestival->month, SpringFestival->day);
             if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) LocationLunardt = 366 - LocationSF + Locationdt + 1;
             LocationLunardt = 365 - LocationSF + Locationdt + 1;
         }        
         
-        for (; Lunardt.month <= 13; Lunardt.month++) {
+        for (; Lunardt->month <= 13; Lunardt->month++) {
             int dayOfmonth = 29;//农历小月天数
-            if ((LUNAR_YEARS[year_index] >> (6 + Lunardt.month)) & 0x1/*通过第7~19位数据判断大小月*/) dayOfmonth = 30; //农历大月天数
+            if ((LUNAR_YEARS[year_index] >> (6 + Lunardt->month)) & 0x1/*通过第7~19位数据判断大小月*/) dayOfmonth = 30; //农历大月天数
             if (LocationLunardt <= dayOfmonth) {//当位置比天数小退出循环
                 break;
             }
@@ -199,19 +183,20 @@ void Datetime::showMoon() {
                 LocationLunardt -= dayOfmonth;
             }
         }
-        Lunardt.day = LocationLunardt;
+        Lunardt->day = LocationLunardt;
+        delete SpringFestival;
     }
 
     int leapOfLunaryear = (LUNAR_YEARS[year_index] >> 20) & 0xf;//通过第20~23位数据得出这年有无闰月，是闰几月
-    if (leapOfLunaryear > 0 && leapOfLunaryear < Lunardt.month) {
-        Lunardt.month--;
-        if (leapOfLunaryear == Lunardt.month) Lunardt.LunarLeap = true;
+    if (leapOfLunaryear > 0 && leapOfLunaryear < Lunardt->month) {
+        Lunardt->month--;
+        if (leapOfLunaryear == Lunardt->month) Lunardt->LunarLeap = true;
     }
 
     //输出结果
     int TianGan = 0, DiZhi = 0;
-    TianGan = (Lunardt.year - 1864) % 10;
-    DiZhi = (Lunardt.year - 1864) % 12;
+    TianGan = (Lunardt->year - 1864) % 10;//以1864年为基准计算天干地支
+    DiZhi = (Lunardt->year - 1864) % 12;
     switch (TianGan) {
         case 0: cout << "甲"; break;
         case 1: cout << "乙"; break;
@@ -240,8 +225,8 @@ void Datetime::showMoon() {
     }
     cout << "年";
     
-    if (Lunardt.LunarLeap) cout << "闰";
-    switch (Lunardt.month) {
+    if (Lunardt->LunarLeap) cout << "闰";
+    switch (Lunardt->month) {
         case 1: cout << "正"; break;
         case 2: cout << "二"; break;
         case 3: cout << "三"; break;
@@ -257,7 +242,7 @@ void Datetime::showMoon() {
     }
     cout << "月";
     
-    switch (Lunardt.day) {
+    switch (Lunardt->day) {
         case 1: cout << "初一" << endl; break;
         case 2: cout << "初二" << endl; break;
         case 3: cout << "初三" << endl; break;
@@ -289,7 +274,7 @@ void Datetime::showMoon() {
         case 29: cout << "廿九" << endl; break;
         case 30: cout << "三十" << endl; break;
     }//二十四节气对特定日期输出，不写了
-    
+    delete Lunardt;
 }
 
 int LocationOfSY(int year, int month, int day) {
@@ -323,12 +308,4 @@ int LocationOfSY(int year, int month, int day) {
         case 11: return 304 + day; break;
         case 12: return 334 + day; break;
     }
-=======
-  std::cout << " Go die, Ha~Ha~" << std::endl;
-}
-void DateTime::showTime()
-{
-  printf("当前时间：%d/%d/%d %d:%d:%d\n", year, month, day, hour, minute, second);
-  std::cout << sth << std::endl;
->>>>>>> upstream/master
 }
