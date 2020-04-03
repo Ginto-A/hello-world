@@ -11,14 +11,15 @@ int main()
     int a = 100;
     int count = 0;
 
-    for(a = 100; a < 10000; a++){
-		int i = 0, sum = 0, product = 0;
+    for(a = 100; a < 999; a++){
+		int i = 0, sum = 0, product = 0, multi = 1;
 	    int num[5] = {0};
 		for(i = 0; i < splitNum(a, num); i++){
 			sum += num[i];
-			product += num[i] * num [i];
+			product += (num[i] * num [i]);
+			multi *= num[i];
 		}
-		if(isPrime(a) && isPrime(sum) && isPrime(product)){
+		if(isPrime(a) && isPrime(sum) && isPrime(product) && isPrime(multi)){
 			count++;
 			printf("%d\t", a);
 			if(count % 5 == 0) printf("\n");
