@@ -1,77 +1,58 @@
-//作业：完成以下框架的代码细节，程序能编译运行得到正确结果 
+//作业：面向对象设计以下框架的代码细节，程序能编译运行得到正确结果 
 #include <iostream>
 class SuperPrime {
   public:
-  	SuperPrime():number(0) {
+  	SuperPrime():number(0) {  //为什么必须有？ 
+  	  size = 0;
+  	}
+  	SuperPrime(int n):number(n) {
+  	  size = 0;
+  	  split();  //它就是构造对象 
 	}
   	~SuperPrime() {
+  	  for (int i = 0; i < size; ++i)  //销毁对象 
+		delete N[i]; 
 	}
-  	void Setnumber(int n) {//设定number的值 
-  		int *p =(int*) &number;
-		*p = n;
-	}
-	bool isSuperPrime() {//判断超级素数 
-  	  	split(number, N);
-  	  	int a = sum();//各位数和 
-	  	int b = multi();//各位数积 
-	  	int c = squareSum();//各位数平方和 
-	  	if (isPrime(number) && isPrime(a) && isPrime(b) && isPrime(c))
-	    	return true; 
-  	  	return false;
-	}
-	int show() {//间接访问number 
-		return number;
+  	bool isSuperPrime() {
+  	  SuperPrime a(sum());   //将普通整数转变为对象 
+	  SuperPrime b(multi());
+	  SuperPrime c(squareSum());
+	  if (isPrime() && a.isPrime() && b.isPrime() && c.isPrime())
+	    return true; 
+  	  return false;
 	}
   private:
   	const int number;
-  	int N[5], size;//N存储分割的各位数，size表示位数 
-  	bool isPrime(int x) { //判断素数 
-  		int i = 2;
-		if(x < 2) return false;
-		for(i = 2; i < x; i++){
-    		if(x % i == 0){
-    			return false;
-			}
-		}
-		return true;
+  	SuperPrime *N[100];
+	int size;
+  	bool isPrime() { 
+  	  //2到number-1的因子 
+  	  return false;
 	}
-	void split(int number,int N[]) {
-		int i = 0, x = number;
-		for(i = 0; x >= 10; i++){
-			N[i] = x % 10;
-			x = x / 10;
-		}//位是倒序的 
-		N[i] = x;
-		size = i + 1;// number split into N
+	void split() {   //工厂方法设计模式 
+	  // number split into N
+	  int temp = number;
+	  while(temp > 0) {
+	  	int n = temp % 10;
+	  	temp /= 10;
+	  	N[size] = new SuperPrime(n);   //构造对象 
+	  	size += 1;
+	  } 
 	}
 	int sum() {
-		int Sum = 0;
-		int i;
-		for(i = 0; i < size; i++)
-			Sum += N[i];
-		return Sum;
+		return 0; 
 	}
 	int multi() {
-		int Multi = 1;
-		int i;
-		for(i = 0; i < size; i++)
-			Multi *= N[i];
-		return Multi;
+		return 0;
 	}
 	int squareSum() {
-		int square = 0;
-		int i;
-		for(i = 0; i < size; i++)
-			square += (N[i] * N[i]);
-		return square;
+		return 0;
 	}
 };
 class Set {
   public:
   	Set(int from, int to) {//设置判断范围 
-  	  size = to - from;
-  	  begin = from;
-  	  end = to;
+  	  size = 0;
 	}
   	~Set() {
 	}
@@ -79,7 +60,6 @@ class Set {
   	  	int count = 0;
   	  	int i;
   	  	for (i = 0; i < size; i++) {
-			set[i].Setnumber(i + begin);//设值 
   	    	if(set[i].isSuperPrime())//判断 
   	      		count += 1;
   		}
@@ -87,22 +67,22 @@ class Set {
 	}
   	int sum() { //超级素数和 
   	  	int sum = 0;
-  	  	int i;
-  	  	for (i = 0; i < size; i++) {
-  	    	set[i].Setnumber(i + begin);//设值 
-			if(set[i].isSuperPrime())//判断 
-  	      		sum += set[i].show();//number是private，不能直接访问 
-		}
+  	  	/*int i;
+  	  	for(i = 0; i < size; i++)
+			if(set[i].isSuperPrime())
+				count++;
+				*/
   	    return sum; 
 	}
   private:
   	SuperPrime set[1000];
   	int size;//判断范围 
-  	int begin, end;//范围开头与结尾 
 };
 int main() {
-  Set ss(100, 999);
-  std::cout << "How Many: " << ss.count() << std::endl;
-  std::cout << "Sum is " << ss.sum() << std::endl;
+  SuperPrime sp(113);
+  if (sp.isSuperPrime())
+    std::cout << "113 is SuperPrime" << std::endl;
+  else
+    std::cout << "113 is NOT SuperPrime" << std::endl;
   return 0;
 }
