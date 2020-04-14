@@ -14,7 +14,7 @@ class SuperPrime {
 		delete N[i]; 
 	}
   	bool isSuperPrime() {
-  	  SuperPrime a(sum());   //将普通整数转变为对象 
+  	  SuperPrime a(this->sum());   //将普通整数转变为对象 
 	  SuperPrime b(multi());
 	  SuperPrime c(squareSum());
 	  if (isPrime() && a.isPrime() && b.isPrime() && c.isPrime())
@@ -24,6 +24,7 @@ class SuperPrime {
   private:
   	const int number;
   	SuperPrime *N[100];
+  	
 	int size;
   	bool isPrime() { 
   	  //2到number-1的因子 
@@ -39,14 +40,29 @@ class SuperPrime {
 	  	size += 1;
 	  } 
 	}
-	int sum() {
-		return 0; 
+	SuperPrime sum() {
+		int sum = 0;
+		for(int i = 0; i < size; i++){
+			sum += N[i]->number;
+		}
+		SuperPrime Sum(sum);
+		return Sum; 
 	}
-	int multi() {
-		return 0;
+	SuperPrime multi() {
+		int multi = 0;
+		for(int i = 0; i < size; i++){
+			multi *= N[i]->number;
+		}
+		SuperPrime Multi(multi);
+		return Multi;
 	}
-	int squareSum() {
-		return 0;
+	SuperPrime squareSum() {
+		int squareSum = 0;
+		for(int i = 0; i < size; i++){
+			squareSum += (N[i]->number * N[i]->number);
+		}
+		SuperPrime SquareSum(squareSum);
+		return SquareSum;
 	}
 };
 class Set {
