@@ -9,8 +9,13 @@ class Prime {
 	~Prime() {
 	}
   	bool isPrime() { 
-  	  //2到number-1的因子 
-  	  return false;
+  	  //2到number-1的因子
+		int i;
+		for(i = 2; i < number; i++){
+			if(number % i == 0) break;
+		} 
+		if(i != number) return false;
+		return true;
 	}
   private:
   	const int number;
@@ -33,17 +38,17 @@ class PrimeSet {
 	  Prime *p = new Prime(n);
 	  N[index] = p;
 	  index += 1;
-	  return true;
+	  return true;//添加数 
 	}
 	bool isAllPrime() {
 	  for(int i = 0; i < index; i++)
 	    if (!N[i]->isPrime())
 	      return false;
-	  return true;
+	  return true;//判断是否所有数都是素数 
 	} 
   private:
   	Prime **N;
-	int size, index;
+	int size, index;//size是大小，index是下标 
 };
 class SuperPrime {
   public:
@@ -57,7 +62,7 @@ class SuperPrime {
   	bool isSuperPrime() {
   	  //怎么使用pset？ 
   	  Prime p(number);
-	  if (p.isPrime())
+	  if (p.isPrime() && pset.isAllPrime())
 	    return true; 
   	  return false;
 	}
@@ -67,20 +72,19 @@ class SuperPrime {
 	void split() {   //工厂方法设计模式 
 	  // number split into N
 	  int temp = number;
+	  int sum = 0;
+	  int multi = 1;
+	  int squareSum = 0;
 	  while(temp > 0) {
 	  	int n = temp % 10;
 	  	temp /= 10;
-	  	pset.add(n);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
-	  } 
-	}
-	int sum() {
-	  return 0;
-	}
-	int multi() {
-	  return 0;
-	}
-	int squareSum() {
-	  return 0;
+	  	sum += n;
+		multi *= n;
+		squareSum += n*n; 
+	  }
+	  pset.add(sum);  //和/积/平方和为对象？ 
+	  pset.add(multi);
+	  pset.add(squareSum);
 	}
 };
 class SuperPrimeSet {
