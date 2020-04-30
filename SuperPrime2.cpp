@@ -20,89 +20,69 @@ class Prime {
   private:
   	const int number;
 }; 
-class SuperPrime : public Prime {
-  public:
-  	SuperPrime():Prime(0), pset(3) {  //为什么必须有？ 
-  	}
-  	SuperPrime(int n):Prime(n), pset(3) {
-	  // number split into N
-	  int temp = n;
-	  while(temp > 0) {
-	  	int t = temp % 10;
-	  	temp /= 10;
-	  	pset.add(t);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
-	  } 
-	}
-  	~SuperPrime() {
-	}
-  	bool isSuperPrime() {
-	  if (Prime::isPrime() && pset.isAllPrime())
-	    return true; 
-  	  return false;
-	}
-  private:
-  	PrimeSet pset;
-	int sum() {
-	  return 0;
-	}
-	int multi() {
-	  return 0;
-	}
-	int squareSum() {
-	  return 0;
-	}
-};
 class PrimeSet {
   public:
   	PrimeSet(int size) {
   	  //集合的构造什么？ 
-  	  N = new Prime*[size];
+  	  prime_set = new Prime*[size];
   	  this->size = size;
   	  index = 0;
 	}
 	~PrimeSet() {
   	  for (int i = 0; i < index; ++i)  //销毁对象 
-		delete N[i]; 
-	  delete[] N;
-	}
- 	int count() {
-  	  int count = 0;
-  	  for (int i = 0; i < size; i++)
-  	    if(set[i]->isSuperPrime())
-  	      count += 1;
-	  return count; 
+		delete prime_set[i]; 
+	  delete[] prime_set;
 	}
 
 	bool add(int n) {
 	  if(index == size)  return false;
 	  Prime *p = new Prime(n);
-	  N[index] = p;
+	  prime_set[index] = p;
 	  index += 1;
 	  return true;//添加数 
 	}
 	bool isAllPrime() {
 	  for(int i = 0; i < index; i++)
-	    if (!N[i]->isPrime())
+	    if (!prime_set[i]->isPrime())
 	      return false;
 	  return true;//判断是否所有数都是素数 
 	} 
   private:
-  	Prime **set;
+  	Prime **prime_set;
 	int size, index;//size是大小，index是下标 
 };
+class SuperPrime : public Prime {
+  public:
+  	SuperPrime():Prime(0), pset(3) {  //为什么必须有？ 
+  	}
+  	SuperPrime(int n):Prime(n)/*使用了基类中的构造函数*/, pset(3) {
+	  // number split into N
+	  int temp = n;
 	  int sum = 0;
 	  int multi = 1;
-	  int squareSum = 0;
+	  int squaremulti = 0;
 	  while(temp > 0) {
-	  	int n = temp % 10;
+	  	int t = temp % 10;
 	  	temp /= 10;
-	  	sum += n;
-		multi *= n;
-		squareSum += n*n; 
-	  }
-	  pset.add(sum);  //和/积/平方和为对象？ 
+	  	sum += t;  //作业：单个数字为对象？还是和/积/平方和为对象？ 
+		multi *= t;
+		squaremulti += (t * t);  
+	  } 
+	  pset.add(sum);
 	  pset.add(multi);
-	  pset.add(squareSum);
+	  pset.add(squaremulti);
+	}
+  	~SuperPrime() {
+	}
+  	bool isSuperPrime() {
+	  if (Prime::isPrime() /*使用了基类中的isPrime()*/&& pset.isAllPrime())
+	    return true; 
+  	  return false;
+	}
+  private:
+  	PrimeSet pset;
+};
+
 class SuperPrimeSet {
   public:
   	SuperPrimeSet(int from, int to) {
