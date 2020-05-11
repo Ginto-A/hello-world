@@ -10,80 +10,51 @@ class Prime {
 	}
   	bool isPrime() { 
   	  //2到number-1的因子 
-  	  return false;
+  	  int i;
+		for(i = 2; i < number; i++){
+			if(number % i == 0) break;
+		} 
+		if(i != number) return false;
+		return true;
 	}
   private:
   	const int number;
 }; 
-class PrimeSet {
-  public:
-  	PrimeSet(int size) {
-  	  //集合的构造什么？ 
-  	  set = new Prime*[size];
-  	  this->size = size;
-  	  index = 0;
-	}
-	~PrimeSet() {
-  	  for (int i = 0; i < index; ++i)  //销毁对象 
-		delete set[i]; 
-	  delete[] set;
-	}
- 	int count() {
-  	  int count = 0;
-  	  for (int i = 0; i < size; i++)
-  	    if(set[i]->isPrime())
-  	      count += 1;
-	  return count; 
-	}
-
-	bool add(int n) {
-	  if(index == size)  return false;
-	  Prime *p = new Prime(n);
-	  set[index] = p;
-	  index += 1;
-	  return true;//添加数 
-	}
-	bool isAllPrime() {
-	  for(int i = 0; i < index; i++)
-	    if (!set[i]->isPrime())
-	      return false;
-	  return true;
-	} 
-  private:
-  	Prime **set;
-	int size, index;
-};
 class SuperPrime : public Prime {
   public:
-  	SuperPrime():Prime(0), pset(3) {  //为什么必须有？ 
+  	SuperPrime():Prime(0){  //为什么必须有？ 
   	}
-  	SuperPrime(int n):Prime(n), pset(3) {
+  	SuperPrime(int n):Prime(n){
 	  // number split into N
 	  int temp = n;
+	  int SUm = 0;
+	  int MUlti = 1;
+	  int SQuareSum = 0;
 	  while(temp > 0) {
 	  	int t = temp % 10;
 	  	temp /= 10;
-	  	pset.add(t);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
+	  	SUm += t;
+		MUlti *= t;
+		SQuareSum += (t * t);	
 	  } 
+	  sum = new Prime(SUm);
+	  multi = new Prime(MUlti);
+	  squareSum = new Prime(SQuareSum); 
 	}
   	~SuperPrime() {
+  		delete sum;
+  		delete multi;
+  		delete squareSum;
 	}
   	bool isPrime() {   //类/对象的接口，更抽象说是外观 
-	  if (Prime::isPrime() && pset.isAllPrime())
+	  if (Prime::isPrime() && sum->isPrime() && multi->isPrime() && squareSum->isPrime())
 	    return true; 
   	  return false;
 	}
   private:
-  	PrimeSet pset;
-	int sum() {
-	  return 0;
-	}
-	int multi() {
-	  return 0;
-	}
-	int squareSum() {
-	  return 0;
-	}
+	Prime *sum; 
+	Prime *multi;
+	Prime *squareSum;
 };
 int main() {
   SuperPrime sp(113);
