@@ -8,59 +8,88 @@ class Prime {
 	}
 	~Prime() {
 	}
-  	bool isPrime() { 
+  	virtual bool isPrime() { 
   	  //2到number-1的因子 
-  	  int i;
-		for(i = 2; i < number; i++){
-			if(number % i == 0) break;
-		} 
-		if(i != number) return false;
-		return true;
+  	  std::cout << "Prime's isPrime() call" << std::endl;
+  	  return false;
 	}
   private:
   	const int number;
 }; 
+class PrimeSet {
+  public:
+  	PrimeSet(int size) {
+  	  //集合的构造什么？ 
+  	  set = new Prime*[size];
+  	  this->size = size;
+  	  index = 0;
+	}
+	~PrimeSet() {
+  	  delete[] set;
+	}
+ 	int count() {
+  	  int count = 0;
+  	  for (int i = 0; i < size; i++)
+  	    if(set[i]->isPrime())
+  	      count += 1;
+	  return count; 
+	}
+
+	bool add(Prime *p) {
+	  if(index == size)  return false;
+	  set[index] = p;
+	  index += 1;
+	  return true;
+	}
+	bool isAllPrime() {
+	  for(int i = 0; i < index; i++)
+	    if (!set[i]->isPrime())
+	      return false;
+	  return true;
+	} 
+  private:
+  	Prime **set;
+	int size, index;
+};
 class SuperPrime : public Prime {
   public:
-  	SuperPrime():Prime(0){  //为什么必须有？ 
+  	SuperPrime():Prime(0), pset(3) {  //为什么必须有？ 
   	}
-  	SuperPrime(int n):Prime(n){
+  	SuperPrime(int n):Prime(n), pset(3) {
 	  // number split into N
 	  int temp = n;
-	  int SUm = 0;
-	  int MUlti = 1;
-	  int SQuareSum = 0;
 	  while(temp > 0) {
 	  	int t = temp % 10;
 	  	temp /= 10;
-	  	SUm += t;
-		MUlti *= t;
-		SQuareSum += (t * t);	
+	  	//pset.add(t);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
 	  } 
-	  sum = new Prime(SUm);
-	  multi = new Prime(MUlti);
-	  squareSum = new Prime(SQuareSum); 
 	}
   	~SuperPrime() {
-  		delete sum;
-  		delete multi;
-  		delete squareSum;
 	}
-  	bool isPrime() {   //类/对象的接口，更抽象说是外观 
-	  if (Prime::isPrime() && sum->isPrime() && multi->isPrime() && squareSum->isPrime())
+  	virtual bool isPrime() {   //类/对象的接口，更抽象说是外观 
+  	  std::cout << "SuperPrime's isPrime() call" << std::endl;
+	  if (Prime::isPrime() && pset.isAllPrime())
 	    return true; 
   	  return false;
 	}
   private:
-	Prime *sum; 
-	Prime *multi;
-	Prime *squareSum;
+  	PrimeSet pset;
+	int sum() {
+	  return 0;
+	}
+	int multi() {
+	  return 0;
+	}
+	int squareSum() {
+	  return 0;
+	}
 };
 int main() {
+  SuperPrime p(13);
   SuperPrime sp(113);
-  if (sp.isPrime())
-    std::cout << "113 is SuperPrime" << std::endl;
-  else
-    std::cout << "113 is NOT SuperPrime" << std::endl;
+  PrimeSet set(2);
+  set.add(&sp); 
+  set.add(&p);
+  std::cout << "How Many : " << set.count() << std::endl;
   return 0;
 }
