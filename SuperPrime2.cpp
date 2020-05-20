@@ -10,8 +10,13 @@ class Prime {
 	}
   	virtual bool isPrime() { 
   	  //2到number-1的因子 
-  	  std::cout << "Prime's isPrime() call" << std::endl;
-  	  return false;
+  	  std::cout << "Prime's isPrime() call" << " " << this->number << std::endl;
+  	  int i;
+		for(i = 2; i < number; i++){
+			if(number % i == 0) break;
+		} 
+		if(i != number) return false;
+		return true;
 	}
   private:
   	const int number;
@@ -20,6 +25,12 @@ class PrimeSet {
   public:
   	PrimeSet(int size) {
   	  //集合的构造什么？ 
+  	  set = new Prime*[size];
+  	  this->size = size;
+  	  index = 0;
+	}
+	PrimeSet(int from, int to) {
+  	  size = to - from; 
   	  set = new Prime*[size];
   	  this->size = size;
   	  index = 0;
@@ -42,6 +53,7 @@ class PrimeSet {
 	  return true;
 	}
 	bool isAllPrime() {
+	  std::cout << "PrimeSet's isAllPrime() call" << std::endl;
 	  for(int i = 0; i < index; i++)
 	    if (!set[i]->isPrime())
 	      return false;
@@ -58,13 +70,28 @@ class SuperPrime : public Prime {
   	SuperPrime(int n):Prime(n), pset(3) {
 	  // number split into N
 	  int temp = n;
+	  int sum = 0;
+	  int multi = 1;
+	  int squareSum = 0;
 	  while(temp > 0) {
 	  	int t = temp % 10;
 	  	temp /= 10;
 	  	//pset.add(t);  //作业：单个数字为对象？还是和/积/平方和为对象？ 
+	  	sum += t;
+	  	multi *= t;
+	  	squareSum += (t * t);
 	  } 
+	  Sum = new Prime(sum);
+	  Multi = new Prime(multi);
+	  SquareSum = new Prime(squareSum);
+	  pset.add(Sum);
+	  pset.add(Multi);
+	  pset.add(SquareSum);
 	}
   	~SuperPrime() {
+  		delete Sum;
+  		delete Multi;
+  		delete SquareSum;
 	}
   	virtual bool isPrime() {   //类/对象的接口，更抽象说是外观 
   	  std::cout << "SuperPrime's isPrime() call" << std::endl;
@@ -74,18 +101,12 @@ class SuperPrime : public Prime {
 	}
   private:
   	PrimeSet pset;
-	int sum() {
-	  return 0;
-	}
-	int multi() {
-	  return 0;
-	}
-	int squareSum() {
-	  return 0;
-	}
+  	Prime *Sum;
+	Prime *Multi;
+	Prime *SquareSum; 
 };
 int main() {
-  SuperPrime p(13);
+  Prime p(13);
   SuperPrime sp(113);
   PrimeSet set(2);
   set.add(&sp); 
