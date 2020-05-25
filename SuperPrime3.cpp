@@ -7,7 +7,13 @@ public:
   BigPrime(int n) : num(n){
   }
   virtual bool isPrime() const {
-    return false;
+    	int i;
+		int number = num;
+		for(i = 2; i < number; i++){
+			if(number % i == 0) break;
+		} 
+		if(i != number) return false;
+		return true;
   }
 private:
   const int num;
